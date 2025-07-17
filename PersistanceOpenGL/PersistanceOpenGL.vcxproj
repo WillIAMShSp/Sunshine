@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\;src\Framework;src\vendor;$(SolutionDir)\Linking\include;src\vendor\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\;src\TerrainGenerator;src\Framework;src\vendor;$(SolutionDir)\Linking\include;src\vendor\imgui</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>src\;src\Framework;src\vendor;$(SolutionDir)\Linking\include;src\vendor\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src\;src\TerrainGenerator;src\Framework;src\vendor;$(SolutionDir)\Linking\include;src\vendor\imgui</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -159,6 +159,11 @@
     <ClCompile Include="src\Framework\Square.cpp" />
     <ClCompile Include="src\Framework\Texture.cpp" />
     <ClCompile Include="src\Scenes\BaseScene.cpp" />
+    <ClCompile Include="src\TerrainGenerator\Array2D.cpp" />
+    <ClCompile Include="src\TerrainGenerator\BasePlanet.cpp" />
+    <ClCompile Include="src\TerrainGenerator\BaseTerrain.cpp" />
+    <ClCompile Include="src\TerrainGenerator\PerlinNoise.cpp" />
+    <ClCompile Include="src\TerrainGenerator\PlanetFace.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_demo.cpp" />
@@ -192,6 +197,15 @@
     <ClInclude Include="src\Framework\Square.h" />
     <ClInclude Include="src\Framework\Texture.h" />
     <ClInclude Include="src\Scenes\BaseScene.h" />
+    <ClInclude Include="src\TerrainGenerator\Array2D.h" />
+    <ClInclude Include="src\TerrainGenerator\BasePlanet.h" />
+    <ClInclude Include="src\TerrainGenerator\BaseTerrain.h" />
+    <ClInclude Include="src\TerrainGenerator\FacePlane.h" />
+    <ClInclude Include="src\TerrainGenerator\MinMax.h" />
+    <ClInclude Include="src\TerrainGenerator\PerlinImplementation.h" />
+    <ClInclude Include="src\TerrainGenerator\PerlinNoise.h" />
+    <ClInclude Include="src\TerrainGenerator\PlanetFace.h" />
+    <ClInclude Include="src\TerrainGenerator\PlanetSettings.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_vector_decl.hpp" />
@@ -505,6 +519,8 @@
     <None Include="res\Shaders\SkyboxFragment.shader" />
     <None Include="res\Shaders\SkyboxVertex.shader" />
     <None Include="res\Shaders\Solidfs.shader" />
+    <None Include="res\Shaders\TerrainGenerator\Terrainfs.shader" />
+    <None Include="res\Shaders\TerrainGenerator\Terrainvs.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />
