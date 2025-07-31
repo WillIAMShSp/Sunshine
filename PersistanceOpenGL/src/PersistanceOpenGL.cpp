@@ -38,6 +38,7 @@
 #include "PerlinImplementation.h"
 #include "BasePlanet.h"
 #include "PlanetSettings.h"
+#include "Atmosphere/AtmospherePostProc.h"
 
 
 
@@ -132,9 +133,27 @@ int main(void)
 #pragma endregion
 
 
+    float deltatime = 0;
+    float currenttime = 0;
+    float lasttime = 0;
+
+
+
+
+
+
 
 
 #pragma region Shader declarations
+    
+    Shader atmosphereshader("res/Shaders/Screenvs.shader", "res/Shaders/Atmosphere/Atmospherefs.shader");
+
+    Shader depthshader("res/Shaders/BasicDepthvs.shader", "res/Shaders/BasicDepthfs.shader");
+
+    Shader screenshader("res/Shaders/Screenvs.shader","res/Shaders/Screenfs.shader");
+
+    Shader testshader("res/Shaders/Screenvs.shader", "res/Shaders/testfs.shader");
+    
 
 
     const char* solidsourcevs = "res/Shaders/TerrainGenerator/Terrainvs.shader";
@@ -149,8 +168,11 @@ int main(void)
 
     Shader terrainsource(solidsourcevs, basicfs);
 
+    Shader basicsource("res/Shaders/Basicvs.shader", "res/Shaders/Basicfs.shader");
 
-    terrainsource.Bind();
+
+    //terrainsource
+  
     terrainsource.SetUniform1i("amountoflights", 1);
 
 
@@ -162,6 +184,23 @@ int main(void)
     terrainsource.SetUniform3f("Mat.Color", 1, 1, 1);
     terrainsource.SetUniform3f("Mat.DiffuseColor", 1, 1, 1);
     terrainsource.SetUniform1f("Mat.DiffuseIntensity", 1);
+
+
+
+    //basicsource
+
+    basicsource.SetUniform1i("amountoflights", 1);
+
+
+    basicsource.SetUniform3f("gLights[0].LightPosition", 5.f, 100.f, 5.f);
+    basicsource.SetUniform3f("gLights[0].LightColor", 1.f, 1.f, 1.f);
+    basicsource.SetUniform1f("gLights[0].AmbientIntensity", 0.2f);
+
+
+    basicsource.SetUniform3f("Mat.Color", 1, 1, 1);
+    basicsource.SetUniform3f("Mat.DiffuseColor", 1, 1, 1);
+    basicsource.SetUniform1f("Mat.DiffuseIntensity", 1);
+
 
 
 #pragma endregion
@@ -185,6 +224,35 @@ int main(void)
 
 
 #pragma endregion
+
+
+
+
+
+    FrameBufferObject dfbo(screenwidth, screenheight);
+
+    dfbo.SetDepthMap();
+
+
+  
+    
+
+
+    FullScreenQuad quad;
+    
+    
+
+    
+
+
+
+
+
+
+
+
+
+
 
 #pragma region IMGUI initialization
     IMGUI_CHECKVERSION();
@@ -212,7 +280,7 @@ int main(void)
 
     PerlinNoise perlin;
 
-
+    glm::vec3 btposition(0,0,0); //this is the position of the topleft point of the lattice.
 
 
 
@@ -229,6 +297,7 @@ int main(void)
     perlin.ApplyPerlinNoiseToArray2D(lattice, frequency, amplitude, octaves, persistence);
 
 
+    bt.SetShader(terrainsource);
 
     bt.SetHeightMap(lattice);
 
@@ -238,6 +307,7 @@ int main(void)
 
     bt.InitMesh();
 
+    
 
 
 
@@ -259,6 +329,75 @@ int main(void)
     PlanetSettings planetsettings;
 
 
+
+
+
+
+    AtmospherePostProc atmosphere;
+    AtmosphereSettings atmsettings;
+    
+
+
+
+    
+
+
+
+
+    bool viewplanet = true;
+
+   
+
+
+
+
+    FrameBufferObject frmbffr(screenwidth, screenheight);
+
+    frmbffr.SetTexture2D();
+    frmbffr.SetRenderBuffer();
+
+
+
+
+
+
+
+
+
+
+    bool isdepth = false;
+
+
+
+
+    atmosphereshader.SetUniform1i("u_screentexture", 0);
+
+    atmosphereshader.SetUniform1i("u_depthtexture", 1);
+
+
+
+
+    float atmosphererad = 4;
+    float planetrad = 1;
+
+    glm::vec3 wavelengths(700, 530, 440);
+
+    float scttrstrngth = 10;
+    float densityfalloff = 4;
+
+
+
+
+
+    
+
+    
+
+
+
+
+
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -277,6 +416,10 @@ int main(void)
 
         }
 
+        currenttime = static_cast<float>(glfwGetTime());
+        deltatime = currenttime - lasttime;
+        lasttime = currenttime;
+
 
 
 
@@ -285,13 +428,13 @@ int main(void)
         /* Render here */
         glEnable(GL_DEPTH_TEST);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.f);
+        glClearColor(0.f, 0.f, 0.f, 0.f);
         render.Clear();
 
 
         terrainsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
 
-        camera.Input(window);
+        camera.Input(window, deltatime);
 
 
 
@@ -299,16 +442,139 @@ int main(void)
 
 
 
-        //bt.Draw();
-        planet.SetPlanetSettings(planetsettings);
-        //     
-        planet.UpdateMinMax();
-        //
 
-        planet.Draw();
+      
+        planet.SetPlanetSettings(planetsettings);
+           
+        planet.UpdateMinMax();
+      
+
+
+       
+
+
+
+
+        //screentex.Bind();
+
+        frmbffr.Bind();
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        render.Clear();
+        
+        
+        bt.SetShader(terrainsource);
+
+        if (viewplanet)
+        {
+           planet.Draw();
+            bt.Draw();
+
+
+        }
+
+
+        frmbffr.UnBind();
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        render.Clear();
+
+
+        //here goes the depth shader;
+
+
+
+        camera.Matrix(60.f, 0.1f, 1000.f, depthshader);
+
+        depthshader.Bind();
+
+        dfbo.Bind();
+        glClearColor(0.f,0.1f,0.0f,1.0f);
+        render.Clear();
+
+        bt.SetShader(depthshader);
+        
+
+        if (viewplanet)
+        {
+            planet.DrawDepth(depthshader);
+            bt.Draw();
+        }
+        dfbo.UnBind();
+
 
 
         glDisable(GL_DEPTH_TEST);
+
+
+
+        atmosphereshader.SetUniform3f("u_pos", camera.GetPosition());
+        atmosphereshader.SetUniformMat4fv("u_inverseview", camera.GetInverseViewMatrix());
+        atmosphereshader.SetUniformMat4fv("u_inverseproj", camera.GetInverseProjectionMatrix());
+
+        float scatterR = glm::pow(400 / wavelengths.x, 4) * scttrstrngth;
+        float scatterG = glm::pow(400 / wavelengths.y, 4) * scttrstrngth;
+        float scatterB = glm::pow(400 / wavelengths.z, 4) * scttrstrngth;
+
+
+        glm::vec3 scatteringcoff(scatterR, scatterG, scatterB);
+
+
+        //atmosphereshader.SetUniform3f("u_wavelengths", scatteringcoff);
+        atmosphereshader.SetUniform1f("u_atmosphereradius", atmosphererad);
+        atmosphereshader.SetUniform1f("u_planetradius", planetrad);
+        atmosphereshader.SetUniform1f("u_densityfalloff", densityfalloff);
+
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        render.Clear();
+
+        frmbffr.GetTex().Bind(0);
+        dfbo.GetDepthTex().Bind(1);
+
+        atmosphereshader.Bind();
+
+        
+
+        quad.Draw();
+
+
+
+
+
+
+
+
+
+
+        //
+
+        
+        /*atmosphere.SetCameraUniforms(camera);
+        
+        atmosphere.SetScreenTexture(frmbffr.GetTex());
+        
+        atmosphere.SetDepthBuffer(dfbo.GetDepthTex());
+        
+        atmosphere.Draw();
+
+
+       */
+
+
+
+        
+
+
+
+       
+
+
+
+
+
+
+        
+        
+       
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -323,7 +589,7 @@ int main(void)
 
         ImGui::End();
 
-        ImGui::Begin("Planet Settings");
+       /* ImGui::Begin("Planet Settings");
 
         if (ImGui::Button("Generate"))
         {
@@ -358,7 +624,7 @@ int main(void)
             }
         }
 
-        ImGui::End();
+        ImGui::End();*/
 
         ImGui::Begin("Controls");
 
@@ -366,8 +632,22 @@ int main(void)
 
         ImGui::Checkbox("Lock Mouse", &camera.lockmouse);
         ImGui::Checkbox("Wireframe Mode", &wireframe);
+        ImGui::Checkbox("isdepth?", &isdepth);
 
         ImGui::End();
+
+        ImGui::Begin("atmosphere");
+
+        ImGui::SliderFloat("Red Wavelength", &wavelengths.x, 0, 700);
+        ImGui::SliderFloat("Green Wavelength", &wavelengths.y, 0, 700);
+        ImGui::SliderFloat("Blue Wavelength", &wavelengths.z, 0, 700);
+
+        ImGui::SliderFloat("Density Fall off", &densityfalloff, 0, 100);
+        ImGui::SliderFloat("Atmosphere Radius", &atmosphererad,0, 10);
+        ImGui::SliderFloat("Planet Radius", &planetrad, 0, 10);
+
+        ImGui::End();
+
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

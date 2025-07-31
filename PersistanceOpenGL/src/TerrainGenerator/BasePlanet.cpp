@@ -153,15 +153,30 @@ void BasePlanet::Draw()
 
 }
 
-void BasePlanet::testsmoothnorm()
+void BasePlanet::DrawDepth(Shader& depthshader)
 {
-
-	SmoothenNormals();
-
+	depthshader.Bind();
 	
+	for (int i = 0; i < 6; i++)
+	{
+		int size = m_planetfaces[i].GetIndexSize();
+
+		m_planetfaces[i].m_vao.Bind();
+		m_planetfaces[i].m_ib.Bind();
+
+
+		glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+
+		m_planetfaces[i].m_ib.UnBind();
+		m_planetfaces[i].m_vao.UnBind();
+
+	}
+
 
 
 }
+
+
 
 void BasePlanet::ResetMinMax()
 {

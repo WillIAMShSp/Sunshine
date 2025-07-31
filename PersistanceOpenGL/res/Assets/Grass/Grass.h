@@ -6,17 +6,15 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-class RenderableObject
+class Grass
 {
 public:
 
-	RenderableObject();
-	~RenderableObject();
+	Grass();
+	~Grass();
 
 
 	void SetPosition(const glm::vec3& newpos);
-	void SetScale(const glm::vec3& newscale);
-
 
 
 
@@ -29,18 +27,17 @@ private:
 
 private: //Dependencies
 
-	
+
 	ModelLoader m_model;
-	
+
 	Shader m_shadersource;
-	
+
 	Renderer m_renderer;
 
 
 	glm::mat4 m_modelmatrix = glm::mat4(1.f);
 	glm::vec3 m_position = glm::vec3(0.f, 0.f, 0.f);
 	glm::vec3 m_orientation = glm::vec3(0.f, 0.f, 0.f);
-	glm::vec3 m_scale = glm::vec3(1.0);
 
 
 
@@ -56,4 +53,4 @@ public:
 
 
 
-}; 
+};

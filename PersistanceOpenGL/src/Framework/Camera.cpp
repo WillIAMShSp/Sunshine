@@ -28,48 +28,48 @@ void Camera::Matrix(const float& fov, const float& near, const float& far, Shade
 	
 }
 
-void Camera::Input(GLFWwindow* window) // The input is kinda backwards from what unity et al use so keep that in mind.
+void Camera::Input(GLFWwindow* window, float deltatime) // The input is kinda backwards from what unity et al use so keep that in mind.
 {
 
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		Position += speed * -glm::normalize(glm::cross(Orientation, Up));
+		Position += speed * -glm::normalize(glm::cross(Orientation, Up)) * deltatime;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		Position += speed * glm::normalize(glm::cross(Orientation, Up));
+		Position += speed * glm::normalize(glm::cross(Orientation, Up)) * deltatime;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		Position += speed * Orientation;
+		Position += speed * Orientation * deltatime;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		Position += speed * -Orientation;
+		Position += speed * -Orientation * deltatime;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		Position += speed * Up;
+		Position += speed * Up * deltatime;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
-		Position += speed * -Up;
+		Position += speed * -Up * deltatime;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		speed = 0.3f;
+		speed = runningspeed;
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
 	{
-		speed = 0.1f;
+		speed = walkingspeed;
 	}
 
 	

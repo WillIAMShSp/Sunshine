@@ -30,13 +30,7 @@ void FrameBufferObject::SetTexture2D(const unsigned int& amountoftextures)
 
 	for (int i = 0; i < amountoftextures; i++)
 	{
-		if (m_textureassigned)
-		{
-			m_textures[i].Bind(i);
-
-		}
-
-		else
+		if(!m_textureassigned)
 		{
 			Bind();
 			m_textures.push_back(Texture(m_width, m_height));

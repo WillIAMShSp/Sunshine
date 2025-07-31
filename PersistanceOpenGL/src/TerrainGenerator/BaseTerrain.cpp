@@ -195,7 +195,7 @@ void BaseTerrain::UpdateNormals()
 void BaseTerrain::Draw()
 {
 
- 
+    m_shader.Bind();
 
     m_vao.Bind();
     m_ib.Bind();
@@ -207,7 +207,7 @@ void BaseTerrain::Draw()
     m_vao.UnBind();
     
     
-
+    m_shader.UnBind();
     
 
 

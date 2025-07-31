@@ -140,9 +140,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="res\Assets\Atmosphere\AtmosphereIcosphere.cpp" />
+    <ClCompile Include="res\Assets\Grass\Grass.cpp" />
     <ClCompile Include="res\Assets\Heart\Heart.cpp" />
     <ClCompile Include="res\Assets\Rose\Rose.cpp" />
     <ClCompile Include="res\Assets\Star\Star.cpp" />
+    <ClCompile Include="src\Atmosphere\AtmospherePostProc.cpp" />
     <ClCompile Include="src\Framework\Camera.cpp" />
     <ClCompile Include="src\Framework\CubeMap.cpp" />
     <ClCompile Include="src\Framework\FrameBufferObject.cpp" />
@@ -177,9 +180,12 @@
     <ClCompile Include="src\Framework\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="res\Assets\Atmosphere\AtmosphereIcosphere.h" />
+    <ClInclude Include="res\Assets\Grass\Grass.h" />
     <ClInclude Include="res\Assets\Heart\Heart.h" />
     <ClInclude Include="res\Assets\Rose\Rose.h" />
     <ClInclude Include="res\Assets\Star\Star.h" />
+    <ClInclude Include="src\Atmosphere\AtmospherePostProc.h" />
     <ClInclude Include="src\Framework\BasicShader.h" />
     <ClInclude Include="src\Framework\Camera.h" />
     <ClInclude Include="src\Framework\CubeMap.h" />
@@ -510,10 +516,13 @@
     <ClInclude Include="src\Framework\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\Shaders\Atmosphere\Atmospherefs.shader" />
+    <None Include="res\Shaders\Atmosphere\RaySphere.shader" />
     <None Include="res\Shaders\BasicDepthfs.shader" />
     <None Include="res\Shaders\BasicDepthvs.shader" />
     <None Include="res\Shaders\Basicfs.shader" />
     <None Include="res\Shaders\Basicvs.shader" />
+    <None Include="res\Shaders\Grass\Grassvs.shader" />
     <None Include="res\Shaders\Screenfs.shader" />
     <None Include="res\Shaders\Screenvs.shader" />
     <None Include="res\Shaders\SkyboxFragment.shader" />
@@ -521,6 +530,7 @@
     <None Include="res\Shaders\Solidfs.shader" />
     <None Include="res\Shaders\TerrainGenerator\Terrainfs.shader" />
     <None Include="res\Shaders\TerrainGenerator\Terrainvs.shader" />
+    <None Include="res\Shaders\testfs.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />

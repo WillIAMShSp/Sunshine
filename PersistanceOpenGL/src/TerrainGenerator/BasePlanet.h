@@ -34,11 +34,13 @@ public:
 	void SmoothenNormals();
 
 	void Draw();
+	
+	void DrawDepth(Shader& depthshader);
 
 	int m_resolution = 10;
 
 
-	void testsmoothnorm();
+	
 
 
 	bool m_resetminmax = true;

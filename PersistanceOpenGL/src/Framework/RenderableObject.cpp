@@ -16,6 +16,15 @@ void RenderableObject::SetPosition(const glm::vec3& newpos)
 
 }
 
+void RenderableObject::SetScale(const glm::vec3& newscale)
+{
+
+	m_scale = newscale;
+
+
+
+}
+
 void RenderableObject::SetShader(const Shader& shader)
 {
 	m_shadersource = shader;
@@ -39,7 +48,7 @@ void RenderableObject::Draw()
 	m_modelmatrix = glm::mat4(1.f);
 
 	m_modelmatrix = glm::translate(m_modelmatrix, m_position);
-
+	m_modelmatrix = glm::scale(m_modelmatrix, m_scale);
 
 
 	m_shadersource.SetUniformMat4fv("u_Model", m_modelmatrix);

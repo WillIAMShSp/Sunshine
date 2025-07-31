@@ -17,7 +17,7 @@ public:
 
 	void Matrix(const float& fov, const float& near, const float& far, Shader& shader);
 
-	void Input(GLFWwindow* window);
+	void Input(GLFWwindow* window, float deltatime);
 
 
 
@@ -75,6 +75,8 @@ private:
 	float speed = 0.001f;
 	float sensitivity = 100.f;
 
+	float walkingspeed = 3;
+	float runningspeed = 5;
 
 
 	bool initialactivation = true;

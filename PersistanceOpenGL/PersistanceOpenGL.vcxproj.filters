@@ -120,6 +120,15 @@
     <ClCompile Include="src\TerrainGenerator\PlanetFace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Atmosphere\AtmospherePostProc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="res\Assets\Atmosphere\AtmosphereIcosphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="res\Assets\Grass\Grass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Framework\BasicShader.h">
@@ -1115,6 +1124,15 @@
     <ClInclude Include="src\TerrainGenerator\PlanetSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Atmosphere\AtmospherePostProc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\Assets\Atmosphere\AtmosphereIcosphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="res\Assets\Grass\Grass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vendor\glm\detail\func_common.inl">
@@ -1542,5 +1560,9 @@
     <None Include="res\Shaders\Solidfs.shader" />
     <None Include="res\Shaders\TerrainGenerator\Terrainfs.shader" />
     <None Include="res\Shaders\TerrainGenerator\Terrainvs.shader" />
+    <None Include="res\Shaders\Atmosphere\RaySphere.shader" />
+    <None Include="res\Shaders\testfs.shader" />
+    <None Include="res\Shaders\Grass\Grassvs.shader" />
+    <None Include="res\Shaders\Atmosphere\Atmospherefs.shader" />
   </ItemGroup>
 </Project>
