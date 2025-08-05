@@ -31,6 +31,18 @@ public:
 	
 	void UpdateMinMax();
 
+	const float& GetMinValue()
+	{
+		return m_minmax.GetMin();
+	
+	}
+
+	const float& GetMaxValue()
+	{
+		return m_minmax.GetMax();
+
+	}
+
 	void SmoothenNormals();
 
 	void Draw();

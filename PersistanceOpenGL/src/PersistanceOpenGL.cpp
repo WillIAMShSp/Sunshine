@@ -383,7 +383,12 @@ int main(void)
     glm::vec3 wavelengths(700, 530, 440);
 
     float scttrstrngth = 10;
-    float densityfalloff = 4;
+    float scaleheight = 0.25;
+    float sunscaleheight = 0.25;
+    float esun = 20;
+    float timeofday = 0;
+    glm::vec3 dirtosun = glm::vec3(0,1,0);
+
 
 
 
@@ -467,7 +472,7 @@ int main(void)
         if (viewplanet)
         {
            planet.Draw();
-            bt.Draw();
+            //bt.Draw();
 
 
         }
@@ -496,7 +501,7 @@ int main(void)
         if (viewplanet)
         {
             planet.DrawDepth(depthshader);
-            bt.Draw();
+            //bt.Draw();
         }
         dfbo.UnBind();
 
@@ -514,14 +519,22 @@ int main(void)
         float scatterG = glm::pow(400 / wavelengths.y, 4) * scttrstrngth;
         float scatterB = glm::pow(400 / wavelengths.z, 4) * scttrstrngth;
 
+        dirtosun.x = glm::cos(timeofday);
+        dirtosun.y = glm::sin(timeofday);
+
+
 
         glm::vec3 scatteringcoff(scatterR, scatterG, scatterB);
 
+        float minplanetpos = planet.GetMinValue();
 
-        //atmosphereshader.SetUniform3f("u_wavelengths", scatteringcoff);
+        atmosphereshader.SetUniform3f("u_wavelengths", scatteringcoff);
         atmosphereshader.SetUniform1f("u_atmosphereradius", atmosphererad);
-        atmosphereshader.SetUniform1f("u_planetradius", planetrad);
-        atmosphereshader.SetUniform1f("u_densityfalloff", densityfalloff);
+        atmosphereshader.SetUniform1f("u_planetradius", minplanetpos);
+        atmosphereshader.SetUniform1f("u_scaleheight", scaleheight);
+        atmosphereshader.SetUniform1f("u_sunscaleheight", sunscaleheight);
+        atmosphereshader.SetUniform1f("esun", esun);
+        atmosphereshader.SetUniform3f("u_dirtosun", dirtosun);
 
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -589,7 +602,7 @@ int main(void)
 
         ImGui::End();
 
-       /* ImGui::Begin("Planet Settings");
+        ImGui::Begin("Planet Settings");
 
         if (ImGui::Button("Generate"))
         {
@@ -624,7 +637,7 @@ int main(void)
             }
         }
 
-        ImGui::End();*/
+        ImGui::End();
 
         ImGui::Begin("Controls");
 
@@ -641,10 +654,14 @@ int main(void)
         ImGui::SliderFloat("Red Wavelength", &wavelengths.x, 0, 700);
         ImGui::SliderFloat("Green Wavelength", &wavelengths.y, 0, 700);
         ImGui::SliderFloat("Blue Wavelength", &wavelengths.z, 0, 700);
+        ImGui::SliderFloat("Scattering Strength", &scttrstrngth, 0, 10);
+        ImGui::SliderFloat("Sun Intensity", &esun, 0, 70);
 
-        ImGui::SliderFloat("Density Fall off", &densityfalloff, 0, 100);
-        ImGui::SliderFloat("Atmosphere Radius", &atmosphererad,0, 10);
-        ImGui::SliderFloat("Planet Radius", &planetrad, 0, 10);
+        ImGui::SliderFloat("Density Scale Height", &scaleheight, 0, 1);
+        ImGui::SliderFloat("Sun Density Scale Height", &sunscaleheight, 0, 1);
+        ImGui::SliderFloat("Atmosphere Radius", &atmosphererad,0, 1000);
+        ImGui::SliderFloat("Planet Radius", &planetrad, 0, 1000);
+        ImGui::SliderFloat("Time of Day", &timeofday, 0, 6.3);
 
         ImGui::End();
 
