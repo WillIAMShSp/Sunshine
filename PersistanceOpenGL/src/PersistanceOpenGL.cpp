@@ -406,11 +406,17 @@ int main(void)
     
 
     
+    
+
+    int amountofhearts = 10;
+
+    for (int i = 0; i < amountofhearts; i++)
+    {
 
 
 
 
-
+    }
 
 
 
