@@ -30,6 +30,7 @@
 #include "Camera.h"
 #include "FullScreenQuad.h"
 
+
 #include "CubeMap.h"
 
 
@@ -39,6 +40,11 @@
 #include "BasePlanet.h"
 #include "PlanetSettings.h"
 #include "Atmosphere/AtmospherePostProc.h"
+#include "../res/Assets/Heart/Heart.h"
+
+#include "RenderableObject.h"
+
+
 
 
 
@@ -210,6 +216,15 @@ int main(void)
     Renderer render;
 
 
+    RenderableObject heart;
+
+    ModelLoader heartmodel("res/Models/Heart.obj", "res/Materials/Heart.mtl", basicsource);
+
+    heart.SetModel(heartmodel);
+    heart.SetRenderer(render);
+    heart.SetShader(basicsource);
+    
+    
 
 
 #pragma region Basic shader initialization
@@ -333,13 +348,6 @@ int main(void)
 
 
 
-    AtmospherePostProc atmosphere;
-    AtmosphereSettings atmsettings;
-    
-
-
-
-    
 
 
 
@@ -371,6 +379,7 @@ int main(void)
 
 
     atmosphereshader.SetUniform1i("u_screentexture", 0);
+    screenshader.SetUniform1i("u_screentexture", 0);
 
     atmosphereshader.SetUniform1i("u_depthtexture", 1);
 
@@ -397,6 +406,55 @@ int main(void)
     
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -437,13 +495,16 @@ int main(void)
         render.Clear();
 
 
-        terrainsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
+        //terrainsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
+        basicsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
+
 
         camera.Input(window, deltatime);
 
 
 
         camera.Matrix(60.f, 0.1f, 1000.f, terrainsource);
+        camera.Matrix(60.f, 0.1f, 1000.f, basicsource);
 
 
 
@@ -460,7 +521,6 @@ int main(void)
 
 
 
-        //screentex.Bind();
 
         frmbffr.Bind();
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -469,10 +529,13 @@ int main(void)
         
         bt.SetShader(terrainsource);
 
+        
         if (viewplanet)
         {
-           planet.Draw();
+           //planet.Draw();
             //bt.Draw();
+
+            heart.Draw();
 
 
         }
@@ -487,11 +550,17 @@ int main(void)
 
 
 
-        camera.Matrix(60.f, 0.1f, 1000.f, depthshader);
 
-        depthshader.Bind();
+        
+        //depth buffer
+        
 
-        dfbo.Bind();
+        //camera.Matrix(60.f, 0.1f, 1000.f, depthshader);
+        
+        //depthshader.Bind();
+
+
+        /*dfbo.Bind();
         glClearColor(0.f,0.1f,0.0f,1.0f);
         render.Clear();
 
@@ -501,17 +570,16 @@ int main(void)
         if (viewplanet)
         {
             planet.DrawDepth(depthshader);
-            //bt.Draw();
+            bt.Draw();
         }
-        dfbo.UnBind();
-
+        dfbo.UnBind();*/
 
 
         glDisable(GL_DEPTH_TEST);
 
 
-
-        atmosphereshader.SetUniform3f("u_pos", camera.GetPosition());
+        // atmosphere shader uniforms
+      /*  atmosphereshader.SetUniform3f("u_pos", camera.GetPosition());
         atmosphereshader.SetUniformMat4fv("u_inverseview", camera.GetInverseViewMatrix());
         atmosphereshader.SetUniformMat4fv("u_inverseproj", camera.GetInverseProjectionMatrix());
 
@@ -534,17 +602,17 @@ int main(void)
         atmosphereshader.SetUniform1f("u_scaleheight", scaleheight);
         atmosphereshader.SetUniform1f("u_sunscaleheight", sunscaleheight);
         atmosphereshader.SetUniform1f("esun", esun);
-        atmosphereshader.SetUniform3f("u_dirtosun", dirtosun);
+        atmosphereshader.SetUniform3f("u_dirtosun", dirtosun);*/
 
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         render.Clear();
 
         frmbffr.GetTex().Bind(0);
-        dfbo.GetDepthTex().Bind(1);
+        //dfbo.GetDepthTex().Bind(1);
 
-        atmosphereshader.Bind();
-
+        //atmosphereshader.Bind();
+        screenshader.Bind();
         
 
         quad.Draw();
@@ -558,7 +626,7 @@ int main(void)
 
 
 
-        //
+       
 
         
         /*atmosphere.SetCameraUniforms(camera);
@@ -602,7 +670,9 @@ int main(void)
 
         ImGui::End();
 
-        ImGui::Begin("Planet Settings");
+
+        //Imgui planetsettings
+       /* ImGui::Begin("Planet Settings");
 
         if (ImGui::Button("Generate"))
         {
@@ -637,7 +707,7 @@ int main(void)
             }
         }
 
-        ImGui::End();
+        ImGui::End();*/
 
         ImGui::Begin("Controls");
 
@@ -649,7 +719,9 @@ int main(void)
 
         ImGui::End();
 
-        ImGui::Begin("atmosphere");
+
+        //imgui atmosphere settings
+       /* ImGui::Begin("atmosphere");
 
         ImGui::SliderFloat("Red Wavelength", &wavelengths.x, 0, 700);
         ImGui::SliderFloat("Green Wavelength", &wavelengths.y, 0, 700);
@@ -663,7 +735,7 @@ int main(void)
         ImGui::SliderFloat("Planet Radius", &planetrad, 0, 1000);
         ImGui::SliderFloat("Time of Day", &timeofday, 0, 6.3);
 
-        ImGui::End();
+        ImGui::End();*/
 
 
         ImGui::Render();

@@ -3,12 +3,12 @@ out vec4 FragColor;
   
 in vec2 TexCoords;
 
-uniform sampler2D screenTexture;
+uniform sampler2D u_screentexture;
 
 void main()
 { 
     
-    FragColor = texture(screenTexture, TexCoords);
+    FragColor = texture(u_screentexture, TexCoords);
    
 
 }

@@ -1564,5 +1564,6 @@
     <None Include="res\Shaders\testfs.shader" />
     <None Include="res\Shaders\Grass\Grassvs.shader" />
     <None Include="res\Shaders\Atmosphere\Atmospherefs.shader" />
+    <None Include="res\Shaders\BasicInstancevs.shader" />
   </ItemGroup>
 </Project>

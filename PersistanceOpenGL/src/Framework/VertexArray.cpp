@@ -39,9 +39,44 @@ void VertexArray::AddBuffer(VertexBuffer& vb, VertexArrayLayout& layout)
 		offset += elements[i].count;
 
 	}
-	
 
-	
+}
+
+void VertexArray::AddBufferInstanced(const uint32_t& attributelocation, VertexBuffer& vb, VertexArrayLayout& layout)
+{
+
+
+	Bind();
+	vb.Bind();
+
+	unsigned int stride = layout.GetStride();
+
+	auto& elements = layout.GetElements();
+
+
+	int multiplier = 1;
+
+	int offset = 0;
+
+
+	uint32_t selectedattribute = attributelocation;
+
+	for (int i = 0; i < elements.size(); i++)
+	{
+
+
+		glEnableVertexAttribArray(selectedattribute + i);
+		glVertexAttribPointer(selectedattribute + i, elements[i].count, elements[i].type, elements[i].normalized, stride, (const void*)(offset * sizeof(elements[i].type)));
+
+		offset += elements[i].count;
+
+		glVertexAttribDivisor(selectedattribute+i, 1);
+
+	}
+
+
+
+
 
 }
 

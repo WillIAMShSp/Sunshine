@@ -31,6 +31,15 @@ void Renderer::Draw(VertexArray& vao, size_t count,  Shader& shader)
 
 }
 
+void Renderer::DrawInstanced(VertexArray& vao, size_t count, Shader& shader, const uint32_t& amountofinstances)
+{
+	vao.Bind();
+	shader.Bind();
+
+	glDrawArraysInstanced(GL_TRIANGLES, 0, count, amountofinstances);
+
+}
+
 void Renderer::Clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -521,6 +521,7 @@
     <None Include="res\Shaders\BasicDepthfs.shader" />
     <None Include="res\Shaders\BasicDepthvs.shader" />
     <None Include="res\Shaders\Basicfs.shader" />
+    <None Include="res\Shaders\BasicInstancevs.shader" />
     <None Include="res\Shaders\Basicvs.shader" />
     <None Include="res\Shaders\Grass\Grassvs.shader" />
     <None Include="res\Shaders\Screenfs.shader" />

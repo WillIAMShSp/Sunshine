@@ -16,6 +16,8 @@ public:
 
 	void Draw(VertexArray& vao, IndexBuffer& ib, Shader& shader);
 	void Draw(VertexArray& vao, size_t count, Shader& shader);
+	void DrawInstanced(VertexArray& vao, size_t count, Shader& shader, const uint32_t& amountofinstances);
+	
 	void Clear();
 	
 private:
