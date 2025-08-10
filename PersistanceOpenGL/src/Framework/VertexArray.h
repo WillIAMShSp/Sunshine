@@ -14,6 +14,7 @@ public:
 
 	void AddBuffer(VertexBuffer& vb, VertexArrayLayout& layout);
 	void AddBufferInstanced(const uint32_t& attributelocation, VertexBuffer& vb, VertexArrayLayout& layout);
+	void AddBufferInstancedMat4(VertexBuffer& vb);
 	void SetLayout(VertexArrayLayout& layout);
 
 	void Bind();

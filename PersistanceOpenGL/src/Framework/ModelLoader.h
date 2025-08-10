@@ -37,7 +37,14 @@ public:
 
 	void Draw(Renderer& renderer);
 	void DrawInstanced(Renderer& renderer, VertexBuffer& instancedvb, VertexArrayLayout& instancingvertexarraylayout, const uint32_t& instancedarraysindex, const uint32_t instanceamount);
+	void DrawInstancedTest(Renderer& renderer, VertexBuffer& instancedvb, VertexArrayLayout& instancingvertexarraylayout, const uint32_t& instancedarraysindex, const uint32_t instanceamount);
 
+
+	VertexArray& GetVAO()
+	{
+		return vao;
+
+	}
 
 
 

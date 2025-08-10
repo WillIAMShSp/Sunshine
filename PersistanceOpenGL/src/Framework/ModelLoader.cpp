@@ -490,8 +490,7 @@ void ModelLoader::DrawInstanced(Renderer& renderer, VertexBuffer& instancedvb, V
     if (ismaterialused)
     {
 
-        for (int i = 0; i < instanceamount; i++)
-        {
+       
 
             for (int i = 0; i < VertexBuffers.size(); i++)
             {
@@ -500,7 +499,9 @@ void ModelLoader::DrawInstanced(Renderer& renderer, VertexBuffer& instancedvb, V
                 VertexBuffer& vb = VertexBuffers[i];
 
                 vao.AddBuffer(vb, layout);
-                vao.AddBufferInstanced(instancedarraysindex, instancedvb, instancingvertexarraylayout);
+                //vao.AddBufferInstanced(instancedarraysindex, instancedvb, instancingvertexarraylayout);
+
+                vao.AddBufferInstancedMat4(instancedvb);
 
                 MatLoader.SetUniforms(m_shadersource, material);
 
@@ -515,14 +516,13 @@ void ModelLoader::DrawInstanced(Renderer& renderer, VertexBuffer& instancedvb, V
 
 
 
-        }
+        
 
     }
     else
     {
 
-        for (int i = 0; i < instanceamount; i++)
-        {
+       
 
             VertexBuffer& vb = VertexBuffers[0];
             vao.AddBuffer(vb, layout);
@@ -532,12 +532,42 @@ void ModelLoader::DrawInstanced(Renderer& renderer, VertexBuffer& instancedvb, V
 
 
 
-        }
+        
 
 
     }
 
 
+
+
+
+
+}
+
+void ModelLoader::DrawInstancedTest(Renderer& renderer, VertexBuffer& instancedvb, VertexArrayLayout& instancingvertexarraylayout, const uint32_t& instancedarraysindex, const uint32_t instanceamount)
+{
+
+
+    for (int i = 0; i < VertexBuffers.size(); i++)
+    {
+        Materials& material = MatLoader.m_umats[matnames[i]];
+
+        VertexBuffer& vb = VertexBuffers[i];
+
+        vao.AddBuffer(vb, layout);
+
+        MatLoader.SetUniforms(m_shadersource, material);
+
+        vao.Bind();
+
+        renderer.DrawInstanced(vao, VertexBuffers[i].GetSize(), m_shadersource, instanceamount);
+
+
+        //renderer.Draw(vao, VertexBuffers[i].GetSize(), m_shadersource);
+
+
+
+    }
 
 
 

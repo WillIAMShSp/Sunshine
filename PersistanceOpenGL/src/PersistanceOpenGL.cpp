@@ -176,6 +176,8 @@ int main(void)
 
     Shader basicsource("res/Shaders/Basicvs.shader", "res/Shaders/Basicfs.shader");
 
+    Shader basicinstancingsource("res/Shaders/BasicInstancevs.shader", "res/Shaders/Basicfs.shader");
+
 
     //terrainsource
   
@@ -207,6 +209,22 @@ int main(void)
     basicsource.SetUniform3f("Mat.DiffuseColor", 1, 1, 1);
     basicsource.SetUniform1f("Mat.DiffuseIntensity", 1);
 
+    //basicinstancingsource
+
+    basicinstancingsource.SetUniform1i("amountoflights", 1);
+
+
+    basicinstancingsource.SetUniform3f("gLights[0].LightPosition", 5.f, 100.f, 5.f);
+    basicinstancingsource.SetUniform3f("gLights[0].LightColor", 1.f, 1.f, 1.f);
+    basicinstancingsource.SetUniform1f("gLights[0].AmbientIntensity", 0.2f);
+
+
+    basicinstancingsource.SetUniform3f("Mat.Color", 1, 1, 1);
+    basicinstancingsource.SetUniform3f("Mat.DiffuseColor", 1, 1, 1);
+    basicinstancingsource.SetUniform1f("Mat.DiffuseIntensity", 1);
+
+    
+
 
 
 #pragma endregion
@@ -220,9 +238,12 @@ int main(void)
 
     ModelLoader heartmodel("res/Models/Heart.obj", "res/Materials/Heart.mtl", basicsource);
 
+    
     heart.SetModel(heartmodel);
     heart.SetRenderer(render);
     heart.SetShader(basicsource);
+
+    ModelLoader heartinstancedmodel("res/Models/Heart.obj", "res/Materials/Heart.mtl", basicinstancingsource);
     
     
 
@@ -408,24 +429,109 @@ int main(void)
     
     
 
-    int amountofhearts = 10;
+    int amountofhearts = 100;
 
-    for (int i = 0; i < amountofhearts; i++)
+    std::vector<glm::mat4> matrices;
+    matrices.resize(amountofhearts*amountofhearts);
+    
+    int offset = 3;
+    
+
+
+  /*  for (int i = 0; i < amountofhearts; i++)
+    {
+        glm::mat4 modelmatrix = glm::mat4(1.0);
+        
+
+        modelmatrix = glm::translate(modelmatrix, glm::vec3(i * 0.5, i * 0.1, 0));
+
+        matrices[i] = modelmatrix;
+
+    }*/
+
+
+    glm::vec3 positions[10000];
+
+    int f = 0;
+    for (int y = 0; y < amountofhearts; y++)
     {
 
+        for (int i = 0; i < amountofhearts; i++)
+        {
 
+            positions[f] = glm::vec3(i, 0, y);
+
+
+
+
+
+
+            f++;
+        }
+
+        
 
 
     }
 
 
+    for (int i = 0; i < matrices.size(); i++)
+    {
+        glm::mat4 modelmatrix = glm::mat4(1.0);
+
+        modelmatrix = glm::translate(modelmatrix, positions[i]);
+
+        //std::cout << "posX= " << positions[i].x<<" posZ= "<<positions[i].z<<"\n";
 
 
 
+        matrices[i] = modelmatrix;
+
+
+    }
+
+
+    
+
+    VertexBuffer translations;
+
+    translations.AddBuffer(matrices);
+
+
+    VertexArrayLayout instancinglayout;
 
 
 
+    instancinglayout.push<float>(4);
+    instancinglayout.push<float>(4);
+    instancinglayout.push<float>(4);
+    instancinglayout.push<float>(4);
 
+
+
+    VertexArray& heartvao = heartinstancedmodel.GetVAO();
+
+
+    translations.Bind();
+
+    heartvao.Bind();
+
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+    glEnableVertexAttribArray(5);
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+    glVertexAttribDivisor(3, 1);
+    glVertexAttribDivisor(4, 1);
+    glVertexAttribDivisor(5, 1);
+    glVertexAttribDivisor(6, 1);
+
+
+    heartvao.UnBind();
 
 
 
@@ -503,7 +609,7 @@ int main(void)
 
         //terrainsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
         basicsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
-
+        basicinstancingsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
 
         camera.Input(window, deltatime);
 
@@ -511,6 +617,7 @@ int main(void)
 
         camera.Matrix(60.f, 0.1f, 1000.f, terrainsource);
         camera.Matrix(60.f, 0.1f, 1000.f, basicsource);
+        camera.Matrix(60.f, 0.1f, 1000.f, basicinstancingsource);
 
 
 
@@ -533,16 +640,19 @@ int main(void)
         render.Clear();
         
         
-        bt.SetShader(terrainsource);
+        //bt.SetShader(terrainsource);
 
+
+        basicinstancingsource.Bind();
         
         if (viewplanet)
         {
            //planet.Draw();
             //bt.Draw();
 
-            heart.Draw();
-
+            //heart.Draw();
+            
+            heartinstancedmodel.DrawInstancedTest(render,translations, instancinglayout, 3, amountofhearts* amountofhearts);
 
         }
 

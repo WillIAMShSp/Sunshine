@@ -16,7 +16,7 @@ flat out int v_amountoflights;
 uniform mat4 u_Model = mat4(1.0);
 uniform mat4 u_View;
 uniform mat4 u_Projection;
-uniform int amountoflights = 0;
+uniform int amountoflights = 1;
 
 
 
@@ -35,7 +35,7 @@ void main()
  v_amountoflights = amountoflights;
 
 
- v_modelpos = vec3(u_Model * vec4(position,1.0));
+ v_modelpos = vec3(modelmatrices * vec4(position,1.0));
 
 
 

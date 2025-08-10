@@ -39,6 +39,17 @@ VertexBuffer::VertexBuffer(const std::vector<float>& verts)
 
 }
 
+VertexBuffer::VertexBuffer(const std::vector<glm::mat4>& matrices)
+    :size(matrices.size())
+{
+    
+    glGenBuffers(1, &m_RendererID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+    glBufferData(GL_ARRAY_BUFFER, matrices.size() * sizeof(glm::mat4), matrices.data(), GL_STATIC_DRAW);
+
+}
+
+
 void VertexBuffer::AddBuffer(const std::vector<Vertex>& verts)
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
@@ -46,8 +57,17 @@ void VertexBuffer::AddBuffer(const std::vector<Vertex>& verts)
 
 }
 
+void VertexBuffer::AddBuffer(const std::vector<glm::mat4>& matrices)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+    glBufferData(GL_ARRAY_BUFFER, matrices.size() * sizeof(glm::mat4), matrices.data(), GL_STATIC_DRAW);
+
+}
+
 VertexBuffer::~VertexBuffer()
 {
+
+
 }
 
 void VertexBuffer::Bind()
