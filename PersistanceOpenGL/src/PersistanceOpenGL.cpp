@@ -551,7 +551,7 @@ int main(void)
     
 
 
-    Texture pictex("res/Textures/Boli.png");
+    Texture pictex("res/Textures/Isa.png");
 
 
 
@@ -828,7 +828,7 @@ int main(void)
         atmosphereshader.SetUniform1f("esun", esun);
         atmosphereshader.SetUniform3f("u_dirtosun", dirtosun);*/
 
-
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         render.Clear();
 
