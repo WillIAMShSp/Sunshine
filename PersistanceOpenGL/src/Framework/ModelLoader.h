@@ -14,6 +14,13 @@
 #include "Shader.h"
 
 
+
+
+
+
+
+
+
 class ModelLoader
 {
 
@@ -33,13 +40,13 @@ public:
 
 	
 
-
+	void SetInstancingMat4(VertexBuffer& instancedmat4array);
+	void SetInstancing(VertexBuffer& instancedarray, VertexArrayLayout& arraylayout);
 
 	void Draw(Renderer& renderer);
-	void DrawInstanced(Renderer& renderer, VertexBuffer& instancedvb, VertexArrayLayout& instancingvertexarraylayout, const uint32_t& instancedarraysindex, const uint32_t instanceamount);
-	void DrawInstancedTest(Renderer& renderer, VertexBuffer& instancedvb, VertexArrayLayout& instancingvertexarraylayout, const uint32_t& instancedarraysindex, const uint32_t instanceamount);
-
-
+	void DrawInstanced(Renderer& renderer, uint32_t instanceamount);
+	
+	
 	VertexArray& GetVAO()
 	{
 		return vao;

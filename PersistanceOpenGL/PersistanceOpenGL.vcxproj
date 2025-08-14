@@ -524,6 +524,8 @@
     <None Include="res\Shaders\BasicInstancevs.shader" />
     <None Include="res\Shaders\Basicvs.shader" />
     <None Include="res\Shaders\Grass\Grassvs.shader" />
+    <None Include="res\Shaders\Picture\Picturefs.shader" />
+    <None Include="res\Shaders\Picture\Picturevs.shader" />
     <None Include="res\Shaders\Screenfs.shader" />
     <None Include="res\Shaders\Screenvs.shader" />
     <None Include="res\Shaders\SkyboxFragment.shader" />

@@ -40,6 +40,9 @@ void VertexArray::AddBuffer(VertexBuffer& vb, VertexArrayLayout& layout)
 
 	}
 
+	m_totalelements += elements.size();
+	
+
 }
 
 void VertexArray::AddBufferInstanced(const uint32_t& attributelocation, VertexBuffer& vb, VertexArrayLayout& layout)
@@ -74,7 +77,7 @@ void VertexArray::AddBufferInstanced(const uint32_t& attributelocation, VertexBu
 
 	}
 
-
+	m_totalelements += elements.size();
 
 
 
@@ -102,7 +105,7 @@ void VertexArray::AddBufferInstancedMat4(VertexBuffer& vb)
 	glVertexAttribDivisor(6, 1);
 
 
-
+	m_totalelements += 4;
 
 
 

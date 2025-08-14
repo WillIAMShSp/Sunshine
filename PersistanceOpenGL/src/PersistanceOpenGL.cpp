@@ -177,6 +177,8 @@ int main(void)
     Shader basicsource("res/Shaders/Basicvs.shader", "res/Shaders/Basicfs.shader");
 
     Shader basicinstancingsource("res/Shaders/BasicInstancevs.shader", "res/Shaders/Basicfs.shader");
+    
+    Shader pictureshader("res/Shaders/Picture/Picturevs.shader", "res/Shaders/Picture/Picturefs.shader");
 
 
     //terrainsource
@@ -237,13 +239,13 @@ int main(void)
     RenderableObject heart;
 
     ModelLoader heartmodel("res/Models/Heart.obj", "res/Materials/Heart.mtl", basicsource);
-
-    
-    heart.SetModel(heartmodel);
-    heart.SetRenderer(render);
-    heart.SetShader(basicsource);
-
     ModelLoader heartinstancedmodel("res/Models/Heart.obj", "res/Materials/Heart.mtl", basicinstancingsource);
+    
+    heart.SetModel(heartinstancedmodel);
+    heart.SetRenderer(render);
+    heart.SetShader(basicinstancingsource);
+
+  
     
     
 
@@ -401,8 +403,10 @@ int main(void)
 
     atmosphereshader.SetUniform1i("u_screentexture", 0);
     screenshader.SetUniform1i("u_screentexture", 0);
-
     atmosphereshader.SetUniform1i("u_depthtexture", 1);
+
+    pictureshader.SetUniform1i("u_pictex", 0);
+
 
 
 
@@ -430,6 +434,9 @@ int main(void)
     
 
     int amountofhearts = 100;
+
+
+
 
     std::vector<glm::mat4> matrices;
     matrices.resize(amountofhearts*amountofhearts);
@@ -514,7 +521,11 @@ int main(void)
 
     translations.Bind();
 
-    heartvao.Bind();
+    //heartinstancedmodel.SetInstancing(translations, instancinglayout);
+    //heartinstancedmodel.SetInstancingMat4(translations);
+    heart.SetInstancingParameters(amountofhearts * amountofhearts, translations, instancinglayout);
+
+    /*heartvao.Bind();
 
     glEnableVertexAttribArray(3);
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
@@ -531,7 +542,35 @@ int main(void)
     glVertexAttribDivisor(6, 1);
 
 
-    heartvao.UnBind();
+    heartvao.UnBind();*/
+
+
+
+    FullScreenQuad picquad;
+
+    
+
+
+    Texture pictex("res/Textures/Boli.png");
+
+
+
+
+
+
+
+
+    glm::mat4 picmodel = glm::mat4(1.0);
+
+
+    glm::vec3 picpos(0, 0, 0);
+
+    float& picx = picpos.x;
+    float& picy = picpos.y;
+    float& picz = picpos.z;
+
+
+    
 
 
 
@@ -548,30 +587,18 @@ int main(void)
 
 
 
+ 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    bool CHARGE = false;
+    float Zposoffset = 0;
+    
+    float counter = 0;
+    float fps = 0;
+    float totalsumoffps = 0;
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -592,9 +619,28 @@ int main(void)
         }
 
         currenttime = static_cast<float>(glfwGetTime());
-        deltatime = currenttime - lasttime;
+        deltatime = currenttime - lasttime; 
         lasttime = currenttime;
+        
+        
 
+        counter++;
+        if (counter < 5)
+        {
+            totalsumoffps += 1 / deltatime;
+
+        }
+        else
+        {
+            fps = totalsumoffps / 5;
+            counter = 0;
+            totalsumoffps = 0;
+        }
+
+        std::string sfps = std::to_string((fps));
+        std::string newtitle = "Game - FPS: " + sfps;
+        glfwSetWindowTitle(window, newtitle.c_str());
+        
 
 
 
@@ -618,6 +664,8 @@ int main(void)
         camera.Matrix(60.f, 0.1f, 1000.f, terrainsource);
         camera.Matrix(60.f, 0.1f, 1000.f, basicsource);
         camera.Matrix(60.f, 0.1f, 1000.f, basicinstancingsource);
+        camera.Matrix(60.f, 0.1f, 1000.f, pictureshader);
+
 
 
 
@@ -627,6 +675,57 @@ int main(void)
            
         planet.UpdateMinMax();
       
+
+
+        
+
+        if (CHARGE)
+        {
+            Zposoffset += 1 * deltatime;
+
+        }
+
+
+        int f = 0;
+        for (int y = 0; y < amountofhearts; y++)
+        {
+
+            for (int i = 0; i < amountofhearts; i++)
+            {
+
+                positions[f] = glm::vec3(i, 0, y+Zposoffset);
+
+
+
+
+
+
+                f++;
+            }
+
+
+
+
+        }
+
+
+        for (int i = 0; i < matrices.size(); i++)
+        {
+            
+            //std::cout << "posX= " << positions[i].x<<" posZ= "<<positions[i].z<<"\n";
+
+
+
+            glm::translate(matrices[i], positions[i]);
+
+
+        }
+
+        translations.AddBuffer(matrices);
+
+
+
+
 
 
        
@@ -652,7 +751,16 @@ int main(void)
 
             //heart.Draw();
             
-            heartinstancedmodel.DrawInstancedTest(render,translations, instancinglayout, 3, amountofhearts* amountofhearts);
+            //heartinstancedmodel.DrawInstanced(render, amountofhearts * amountofhearts);
+            heart.DrawInstanced(amountofhearts * amountofhearts);
+
+            
+            picmodel = glm::mat4(1.0);
+            picmodel = glm::translate(picmodel, picpos);
+            pictureshader.SetUniformMat4fv("u_Model", picmodel);
+            pictex.Bind(0);
+            render.Draw(picquad.vao, 6, pictureshader);
+
 
         }
 
@@ -832,6 +940,19 @@ int main(void)
         ImGui::Checkbox("Lock Mouse", &camera.lockmouse);
         ImGui::Checkbox("Wireframe Mode", &wireframe);
         ImGui::Checkbox("isdepth?", &isdepth);
+
+        ImGui::End();
+
+        ImGui::Begin("CHARGE!!!");
+
+        ImGui::SliderFloat("Light X", &picx, -120, 120);
+        ImGui::SliderFloat("Light Y", &picy, -120, 120);
+        ImGui::SliderFloat("Light Z", &picz, -120, 120);
+
+        ImGui::Checkbox("CHARGE?!?!", &CHARGE);
+
+
+        
 
         ImGui::End();
 

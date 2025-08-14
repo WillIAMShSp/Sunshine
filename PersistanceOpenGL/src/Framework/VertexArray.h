@@ -17,6 +17,12 @@ public:
 	void AddBufferInstancedMat4(VertexBuffer& vb);
 	void SetLayout(VertexArrayLayout& layout);
 
+	inline uint16_t& GetAmountofElements()
+	{
+		return m_totalelements;
+	}
+
+
 	void Bind();
 	void UnBind();
 
@@ -24,6 +30,7 @@ public:
 private:
 
 	unsigned int m_RendererID;
+	uint16_t m_totalelements = 0;
 
 
 

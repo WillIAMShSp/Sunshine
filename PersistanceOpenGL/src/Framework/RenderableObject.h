@@ -14,15 +14,20 @@ public:
 	~RenderableObject();
 
 
-	void SetPosition(const glm::vec3& newpos);
-	void SetScale(const glm::vec3& newscale);
+	
+	void SetShader(const Shader& shader);
+	void SetModel(const ModelLoader& model);
+	void SetInstancingParameters(const uint32_t& instanceamount, VertexBuffer& instancematrix, VertexArrayLayout& instancedarraylayout);
+	void SetInstancingMat4(const uint32_t& instanceamount, VertexBuffer& instancematrix);
+	void SetRenderer(const Renderer& renderer);
+	void Draw();
+	void DrawInstanced(const uint32_t& instanceamount = false);
 
 
 
 
 
 
-private:
 
 
 
@@ -43,16 +48,16 @@ private: //Dependencies
 	glm::vec3 m_scale = glm::vec3(1.0);
 
 
+	uint32_t m_instanceamount;
 
 
 
 public:
 
-	void SetShader(const Shader& shader);
-	void SetModel(const ModelLoader& model);
-	void SetRenderer(const Renderer& renderer);
-	void Draw();
 
+	void SetPosition(const glm::vec3& newpos);
+	void SetScale(const glm::vec3& newscale);
+	
 
 
 
