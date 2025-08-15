@@ -113,7 +113,7 @@ int main(void)
     glfwMakeContextCurrent(window);
     if (glewInit() != GLEW_OK)
         std::cout << "error\n";
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
 
 
     // Here's where we can code ourselves!
@@ -433,7 +433,7 @@ int main(void)
     
     
 
-    int amountofhearts = 100;
+    int amountofhearts = 10;
 
 
 
@@ -457,7 +457,7 @@ int main(void)
     }*/
 
 
-    glm::vec3 positions[10000];
+    glm::vec3 positions[100];
 
     int f = 0;
     for (int y = 0; y < amountofhearts; y++)
@@ -593,6 +593,28 @@ int main(void)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     bool CHARGE = false;
     float Zposoffset = 0;
     
@@ -624,18 +646,8 @@ int main(void)
         
         
 
-        counter++;
-        if (counter < 5)
-        {
-            totalsumoffps += 1 / deltatime;
-
-        }
-        else
-        {
-            fps = totalsumoffps / 5;
-            counter = 0;
-            totalsumoffps = 0;
-        }
+        
+        fps = 1 / deltatime;
 
         std::string sfps = std::to_string((fps));
         std::string newtitle = "Game - FPS: " + sfps;
@@ -679,49 +691,49 @@ int main(void)
 
         
 
-        if (CHARGE)
-        {
-            Zposoffset += 1 * deltatime;
+        //if (CHARGE)
+        //{
+        //    Zposoffset += 1 * deltatime;
 
-        }
-
-
-        int f = 0;
-        for (int y = 0; y < amountofhearts; y++)
-        {
-
-            for (int i = 0; i < amountofhearts; i++)
-            {
-
-                positions[f] = glm::vec3(i, 0, y+Zposoffset);
+        //}
 
 
+        //int f = 0;
+        //for (int y = 0; y < amountofhearts; y++)
+        //{
+
+        //    for (int i = 0; i < amountofhearts; i++)
+        //    {
+
+        //        positions[f] = glm::vec3(i, 0, y+Zposoffset);
 
 
 
 
-                f++;
-            }
+
+
+        //        f++;
+        //    }
 
 
 
 
-        }
+        //}
 
 
-        for (int i = 0; i < matrices.size(); i++)
-        {
-            
-            //std::cout << "posX= " << positions[i].x<<" posZ= "<<positions[i].z<<"\n";
+        //for (int i = 0; i < matrices.size(); i++)
+        //{
+        //    
+        //    //std::cout << "posX= " << positions[i].x<<" posZ= "<<positions[i].z<<"\n";
 
 
 
-            glm::translate(matrices[i], positions[i]);
+        //    glm::translate(matrices[i], positions[i]);
 
 
-        }
+        //}
 
-        translations.AddBuffer(matrices);
+        //translations.AddBuffer(matrices);
 
 
 

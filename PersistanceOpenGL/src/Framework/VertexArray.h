@@ -1,6 +1,7 @@
 #pragma once
 
-#include "VertexArray.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include "VertexBuffer.h"
 #include "VertexArrayLayout.h"
 

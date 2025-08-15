@@ -13,13 +13,14 @@
 #include <string>
 
 
-
-class Shader
+class ComputeShader
 {
+
+
 public:
-	Shader();
-	Shader(const std::string& VertexShader, const std::string& FragmentShader);
-	~Shader();
+	ComputeShader();
+	ComputeShader(const std::string& ComputeShaderSource);
+	~ComputeShader();
 
 
 
@@ -36,11 +37,14 @@ public:
 	inline unsigned int GetShader() { return m_Shader; };
 
 
-private:
-	
-	std::string ParseShader(std::string path);
+	void ComputeShaderDispatch(const uint32_t& valueX, const uint32_t& valueY, const uint32_t& valueZ);
 
-	static unsigned int CreateShader(const std::string& VertexShader, const std::string& FragmentShader);
+
+private:
+
+	std::string ParseShader(const std::string& path);
+
+	static unsigned int CreateShader(const std::string& ComputeShaderSource);
 
 	static unsigned int CompileShader(unsigned int type, const std::string& source);
 
@@ -48,4 +52,3 @@ private:
 
 
 };
-

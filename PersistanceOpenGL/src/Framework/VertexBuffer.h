@@ -1,7 +1,11 @@
 #pragma once
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <vector>
 #include "Vertex.h"
 #include "glm/glm.hpp"
+
 
 class VertexBuffer 
 {

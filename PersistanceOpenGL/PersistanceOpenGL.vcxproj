@@ -147,12 +147,14 @@
     <ClCompile Include="res\Assets\Star\Star.cpp" />
     <ClCompile Include="src\Atmosphere\AtmospherePostProc.cpp" />
     <ClCompile Include="src\Framework\Camera.cpp" />
+    <ClCompile Include="src\Framework\ComputeShader.cpp" />
     <ClCompile Include="src\Framework\CubeMap.cpp" />
     <ClCompile Include="src\Framework\FrameBufferObject.cpp" />
     <ClCompile Include="src\Framework\IndexBuffer.cpp" />
     <ClCompile Include="src\Framework\Lights.cpp" />
     <ClCompile Include="src\Framework\MaterialLoader.cpp" />
     <ClCompile Include="src\Framework\ModelLoader.cpp" />
+    <ClCompile Include="src\Framework\ShaderStorageBufferObject.cpp" />
     <ClCompile Include="src\PersistanceOpenGL.cpp" />
     <ClCompile Include="src\Framework\RenderableObject.cpp" />
     <ClCompile Include="src\Framework\RenderBufferObject.cpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="src\Atmosphere\AtmospherePostProc.h" />
     <ClInclude Include="src\Framework\BasicShader.h" />
     <ClInclude Include="src\Framework\Camera.h" />
+    <ClInclude Include="src\Framework\ComputeShader.h" />
     <ClInclude Include="src\Framework\CubeMap.h" />
     <ClInclude Include="src\Framework\FrameBufferObject.h" />
     <ClInclude Include="src\Framework\FullScreenQuad.h" />
@@ -200,6 +203,7 @@
     <ClInclude Include="src\Framework\Renderer.h" />
     <ClInclude Include="src\Framework\ScreenShader.h" />
     <ClInclude Include="src\Framework\Shader.h" />
+    <ClInclude Include="src\Framework\ShaderStorageBufferObject.h" />
     <ClInclude Include="src\Framework\Square.h" />
     <ClInclude Include="src\Framework\Texture.h" />
     <ClInclude Include="src\Scenes\BaseScene.h" />

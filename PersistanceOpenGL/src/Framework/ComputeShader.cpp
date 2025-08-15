@@ -1,42 +1,38 @@
-#include "Shader.h"
-
-
-
-
-Shader::Shader()
+#include "ComputeShader.h"
+ComputeShader::ComputeShader()
 {
 
 }
 
-Shader::Shader(const std::string& VertexShader, const std::string& FragmentShader)
+ComputeShader::ComputeShader(const std::string& ComputeShaderSource)
 {
-    
-    m_Shader = CreateShader(ParseShader(VertexShader), ParseShader(FragmentShader));
+
+    m_Shader = CreateShader(ParseShader(ComputeShaderSource));
 
     Bind();
 
-    
+
 
 }
 
-Shader::~Shader()
+ComputeShader::~ComputeShader()
 {
 }
 
-void Shader::Bind()
+void ComputeShader::Bind()
 {
     glUseProgram(m_Shader);
 
 }
 
-void Shader::UnBind()
+void ComputeShader::UnBind()
 {
     glUseProgram(0);
 }
 
-void Shader::SetUniform4f(const std::string& name, float value1, float value2, float value3, float value4)
+void ComputeShader::SetUniform4f(const std::string& name, float value1, float value2, float value3, float value4)
 {
-    
+
     Bind();
     int location = glGetUniformLocation(m_Shader, name.c_str());
 
@@ -52,7 +48,7 @@ void Shader::SetUniform4f(const std::string& name, float value1, float value2, f
 
 }
 
-void Shader::SetUniform3f(const std::string& name, float value1, float value2, float value3)
+void ComputeShader::SetUniform3f(const std::string& name, float value1, float value2, float value3)
 {
     Bind();
     int location = glGetUniformLocation(m_Shader, name.c_str());
@@ -63,19 +59,34 @@ void Shader::SetUniform3f(const std::string& name, float value1, float value2, f
 
 }
 
-void Shader::SetUniform3f(const std::string& name, const glm::vec3& vector)
+void ComputeShader::SetUniform3f(const std::string& name, const glm::vec3& vector)
 {
     Bind();
     int location = glGetUniformLocation(m_Shader, name.c_str());
 
     glUniform3f(location, vector.x, vector.y, vector.z);
-    
+
     UnBind();
 
 
 }
 
-void Shader::SetUniform1f(const std::string& name, float value)
+void ComputeShader::ComputeShaderDispatch(const uint32_t& valueX, const uint32_t& valueY, const uint32_t& valueZ)
+{
+
+    Bind();
+
+    glDispatchCompute(valueX, valueY, valueZ);
+
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+
+
+
+}
+
+
+void ComputeShader::SetUniform1f(const std::string& name, float value)
 {
     Bind();
     int location = glGetUniformLocation(m_Shader, name.c_str());
@@ -91,7 +102,7 @@ void Shader::SetUniform1f(const std::string& name, float value)
 
 }
 
-void Shader::SetUniform1i(const std::string& name, int value)
+void ComputeShader::SetUniform1i(const std::string& name, int value)
 {
     Bind();
     int location = glGetUniformLocation(m_Shader, name.c_str());
@@ -108,7 +119,7 @@ void Shader::SetUniform1i(const std::string& name, int value)
 
 }
 
-void Shader::SetUniformMat4fv(const std::string& name, const glm::mat4& matrix)
+void ComputeShader::SetUniformMat4fv(const std::string& name, const glm::mat4& matrix)
 {
     Bind();
     int location = glGetUniformLocation(m_Shader, name.c_str());
@@ -123,7 +134,7 @@ void Shader::SetUniformMat4fv(const std::string& name, const glm::mat4& matrix)
 
 
 
-std::string Shader::ParseShader(std::string path)
+std::string ComputeShader::ParseShader(const std::string& path)
 {
     std::ifstream stream(path);
     std::string line;
@@ -148,7 +159,7 @@ std::string Shader::ParseShader(std::string path)
 
 
 }
-unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
+unsigned int ComputeShader::CompileShader(unsigned int type, const std::string& source)
 {
     unsigned int shader = glCreateShader(type);
     const char* src = source.c_str();
@@ -192,20 +203,19 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 
 
 }
-unsigned int Shader::CreateShader(const std::string& VertexShader, const std::string& FragmentShader)
+unsigned int ComputeShader::CreateShader(const std::string& ComputeShaderSource)
 {
     unsigned int program = glCreateProgram();
-    unsigned int vs = CompileShader(GL_VERTEX_SHADER, VertexShader);
-    unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, FragmentShader);
+    unsigned int cs = CompileShader(GL_COMPUTE_SHADER, ComputeShaderSource);
+    
+    
 
-
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
+    glAttachShader(program, cs);
+    
     glLinkProgram(program);
     glValidateProgram(program);
 
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+    glDeleteShader(cs);
 
 
 
@@ -217,3 +227,5 @@ unsigned int Shader::CreateShader(const std::string& VertexShader, const std::st
 
 
 }
+
+
