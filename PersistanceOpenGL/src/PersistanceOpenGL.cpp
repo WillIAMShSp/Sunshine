@@ -43,6 +43,9 @@
 #include "../res/Assets/Heart/Heart.h"
 
 #include "RenderableObject.h"
+#include "ShaderStorageBufferObject.h"
+#include "ComputeShader.h"
+
 
 
 
@@ -180,6 +183,8 @@ int main(void)
     
     Shader pictureshader("res/Shaders/Picture/Picturevs.shader", "res/Shaders/Picture/Picturefs.shader");
 
+    Shader grassinstancedshader("res/Shaders/Grass/Grassvs.shader", "res/Shaders/Basicfs.shader");
+
 
     //terrainsource
   
@@ -225,6 +230,20 @@ int main(void)
     basicinstancingsource.SetUniform3f("Mat.DiffuseColor", 1, 1, 1);
     basicinstancingsource.SetUniform1f("Mat.DiffuseIntensity", 1);
 
+    //grassinstancedshader
+
+    grassinstancedshader.SetUniform1i("amountoflights", 1);
+
+
+    grassinstancedshader.SetUniform3f("gLights[0].LightPosition", 5.f, 100.f, 5.f);
+    grassinstancedshader.SetUniform3f("gLights[0].LightColor", 1.f, 1.f, 1.f);
+    grassinstancedshader.SetUniform1f("gLights[0].AmbientIntensity", 0.2f);
+
+
+    grassinstancedshader.SetUniform3f("Mat.Color", 1, 1, 1);
+    grassinstancedshader.SetUniform3f("Mat.DiffuseColor", 1, 1, 1);
+    grassinstancedshader.SetUniform1f("Mat.DiffuseIntensity", 1);
+
     
 
 
@@ -245,7 +264,16 @@ int main(void)
     heart.SetRenderer(render);
     heart.SetShader(basicinstancingsource);
 
-  
+
+    RenderableObject grass;
+    
+    ModelLoader grassmodel("res/Models/Grass/Grass.obj", "res/Materials/Grass/Grass.mtl", grassinstancedshader);
+
+    grass.SetModel(grassmodel);
+    grass.SetRenderer(render);
+    grass.SetShader(grassinstancedshader);
+
+    
     
     
 
@@ -573,32 +601,38 @@ int main(void)
     
 
 
+    
+
+
+
+
+   
 
 
 
 
 
 
+    ShaderStorageBufferObject ssbo;
+
+    ssbo.Bind(0);
+    ssbo.AddBuffer(matrices);
+    
+    ComputeShader grassmatrixcompute("res/Shaders/ComputeShaders/Grass/Grasscs.shader");
+
+
+    grassmatrixcompute.ComputeShaderDispatch(1, 1, 1);
 
 
 
 
 
+    Texture grassbendmap("res/Textures/Grass/grassbendmap.png");
+    //Texture grassnormalmap("res/Textures/Grass/grassnormalmap.png");
 
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
+    grassinstancedshader.SetUniform1i("u_grassbendmap", 5);
+    grassbendmap.Bind(5);
 
 
 
@@ -668,7 +702,7 @@ int main(void)
         //terrainsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
         basicsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
         basicinstancingsource.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
-
+        grassinstancedshader.SetUniform3f("gLights[0].LightPosition", lightx, lighty, lightz);
         camera.Input(window, deltatime);
 
 
@@ -677,7 +711,7 @@ int main(void)
         camera.Matrix(60.f, 0.1f, 1000.f, basicsource);
         camera.Matrix(60.f, 0.1f, 1000.f, basicinstancingsource);
         camera.Matrix(60.f, 0.1f, 1000.f, pictureshader);
-
+        camera.Matrix(60.f, 0.1f, 1000.f, grassinstancedshader);
 
 
 
@@ -764,14 +798,15 @@ int main(void)
             //heart.Draw();
             
             //heartinstancedmodel.DrawInstanced(render, amountofhearts * amountofhearts);
-            heart.DrawInstanced(amountofhearts * amountofhearts);
+            //heart.DrawInstanced(amountofhearts * amountofhearts);
 
+            grass.DrawInstanced(matrices.size());
             
-            picmodel = glm::mat4(1.0);
+            /*picmodel = glm::mat4(1.0);
             picmodel = glm::translate(picmodel, picpos);
             pictureshader.SetUniformMat4fv("u_Model", picmodel);
             pictex.Bind(0);
-            render.Draw(picquad.vao, 6, pictureshader);
+            render.Draw(picquad.vao, 6, pictureshader);*/
 
 
         }

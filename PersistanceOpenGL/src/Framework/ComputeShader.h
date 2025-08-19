@@ -46,7 +46,7 @@ private:
 
 	static unsigned int CreateShader(const std::string& ComputeShaderSource);
 
-	static unsigned int CompileShader(unsigned int type, const std::string& source);
+	static unsigned int CompileShader(const std::string& source);
 
 	unsigned int m_Shader = -1;
 

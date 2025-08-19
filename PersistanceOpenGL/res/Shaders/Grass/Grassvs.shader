@@ -1,10 +1,10 @@
 
-#version 330 core
+#version 430 core
 
 layout(location = 0) in vec3 position; 
 layout(location = 1) in vec2 texCoord;
 layout(location = 2) in vec3 normals;
-layout(location = 3) in mat4 matrices;
+
 
 out vec3 v_position;
 out vec2 v_texCoord;
@@ -18,24 +18,38 @@ uniform mat4 u_View;
 uniform mat4 u_Projection;
 uniform int amountoflights = 0;
 
+uniform sampler2D u_grassbendmap;
+
+
+layout(std430, binding = 0) buffer matrices
+{
+    mat4 mats[];
+};
 
 
 
 
-
+float windspeed = 0.25;
 
 
 void main()
 {
 
- gl_Position =  u_Projection *  u_View  * u_Model * vec4(position, 1.0);
+ vec3 grassvertexposition = position;
+
+ float grassbend = texture(u_grassbendmap, texCoord).r;
+
+ grassvertexposition.x += 0;
+
+    
+ gl_Position =  u_Projection *  u_View  * mats[gl_InstanceID] * vec4(grassvertexposition, 1.0);
  v_texCoord = texCoord;
  v_normals = normals;
- v_position = position;
+ v_position = grassvertexposition;
  v_amountoflights = amountoflights;
 
 
- v_modelpos = vec3(u_Model * vec4(position,1.0));
+ v_modelpos = vec3(mats[gl_InstanceID] * vec4(grassvertexposition,1.0));
 
 
 

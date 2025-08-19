@@ -9,7 +9,7 @@ ComputeShader::ComputeShader(const std::string& ComputeShaderSource)
 
     m_Shader = CreateShader(ParseShader(ComputeShaderSource));
 
-    Bind();
+    
 
 
 
@@ -159,9 +159,9 @@ std::string ComputeShader::ParseShader(const std::string& path)
 
 
 }
-unsigned int ComputeShader::CompileShader(unsigned int type, const std::string& source)
+unsigned int ComputeShader::CompileShader(const std::string& source)
 {
-    unsigned int shader = glCreateShader(type);
+    unsigned int shader = glCreateShader(GL_COMPUTE_SHADER);
     const char* src = source.c_str();
 
 
@@ -206,7 +206,7 @@ unsigned int ComputeShader::CompileShader(unsigned int type, const std::string& 
 unsigned int ComputeShader::CreateShader(const std::string& ComputeShaderSource)
 {
     unsigned int program = glCreateProgram();
-    unsigned int cs = CompileShader(GL_COMPUTE_SHADER, ComputeShaderSource);
+    unsigned int cs = CompileShader(ComputeShaderSource);
     
     
 

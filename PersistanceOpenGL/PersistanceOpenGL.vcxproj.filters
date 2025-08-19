@@ -1579,5 +1579,7 @@
     <None Include="res\Shaders\BasicInstancevs.shader" />
     <None Include="res\Shaders\Picture\Picturefs.shader" />
     <None Include="res\Shaders\Picture\Picturevs.shader" />
+    <None Include="res\Shaders\ComputeShaders\Grass\Grasscs.shader" />
+    <None Include="res\Shaders\Grass\Grassfs.shader" />
   </ItemGroup>
 </Project>
