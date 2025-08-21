@@ -25,6 +25,10 @@ layout(std430, binding = 0) buffer matrices
 {
     mat4 mats[];
 };
+layout(std430, binding = 1) buffer rotationmatrices
+{
+	mat4 rotationmats[];	
+};
 
 
 
@@ -36,6 +40,9 @@ void main()
 {
 
  vec3 grassvertexposition = position;
+ vec3 grassnormal = normals;
+
+ grassnormal = vec3(rotationmats[gl_InstanceID] * vec4(grassnormal, 1.0));
 
  float grassbend = texture(u_grassbendmap, texCoord).r;
 
@@ -44,7 +51,7 @@ void main()
     
  gl_Position =  u_Projection *  u_View  * mats[gl_InstanceID] * vec4(grassvertexposition, 1.0);
  v_texCoord = texCoord;
- v_normals = normals;
+ v_normals = grassnormal;//normals;
  v_position = grassvertexposition;
  v_amountoflights = amountoflights;
 

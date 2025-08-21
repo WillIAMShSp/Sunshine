@@ -613,10 +613,16 @@ int main(void)
 
 
 
-    ShaderStorageBufferObject ssbo;
+    ShaderStorageBufferObject matricesssbo;
 
-    ssbo.Bind(0);
-    ssbo.AddBuffer(matrices);
+    matricesssbo.Bind(0);
+    matricesssbo.AddBuffer(amountofhearts*amountofhearts*sizeof(glm::mat4), nullptr);
+
+    ShaderStorageBufferObject rotationmatrices;
+
+    rotationmatrices.Bind(1);
+    rotationmatrices.AddBuffer(amountofhearts* amountofhearts * sizeof(glm::mat4), nullptr);
+
     
     ComputeShader grassmatrixcompute("res/Shaders/ComputeShaders/Grass/Grasscs.shader");
 

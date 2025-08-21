@@ -17,7 +17,13 @@ void ShaderStorageBufferObject::Bind(const uint32_t& slot)
 	
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, m_RendererID);
 	
-	m_slot = slot;
+
+	if(m_slot = -1)
+	{ 
+		m_slot = slot;
+	}
+
+	
 }
 
 void ShaderStorageBufferObject::UnBind()
